@@ -1,0 +1,57 @@
+policy_module(metricbeat, 1.0.0)
+
+require {
+  attribute beats_type;
+  attribute beats_log_type;
+  attribute beats_var_lib_type;
+}
+
+type metricbeat_t;
+typeattribute metricbeat_t beats_type;
+
+permissive metricbeat_t;
+type metricbeat_exec_t;
+init_daemon_domain(metricbeat_t, metricbeat_exec_t)
+
+
+allow metricbeat_t self:capability sys_admin;
+allow metricbeat_t self:unix_dgram_socket { connect create getattr setopt };
+allow metricbeat_t self:capability dac_read_search;
+
+type metricbeat_log_t;
+typeattribute metricbeat_log_t beats_log_type;
+logging_log_file(metricbeat_log_t)
+logging_log_filetrans(metricbeat_t, metricbeat_log_t, { dir file lnk_file })
+
+type metricbeat_var_lib_t;
+typeattribute metricbeat_var_lib_t beats_var_lib_type;
+files_type(metricbeat_var_lib_t)
+files_var_lib_filetrans(metricbeat_t, metricbeat_var_lib_t, { dir file lnk_file })
+
+type metricbeat_unit_file_t;
+systemd_unit_file(metricbeat_unit_file_t)
+
+type metricbeat_initrc_exec_t;
+init_script_file(metricbeat_initrc_exec_t)
+
+gen_tunable(metricbeat_can_read_all_logs, true)
+tunable_policy(`metricbeat_can_read_all_logs', `
+    logging_read_all_logs(metricbeat_t)
+    logging_read_audit_log(metricbeat_t)    
+')
+
+gen_tunable(metricbeat_can_manage_all_logs, false)
+tunable_policy(`metricbeat_can_manage_all_logs', `
+    logging_manage_all_logs(metricbeat_t)
+')
+auth_use_nsswitch(metricbeat_t)
+kernel_list_all_proc(metricbeat_t)
+kernel_read_all_proc(metricbeat_t)
+fs_getattr_xattr_fs(metricbeat_t)
+fs_search_cgroup_dirs(metricbeat_t)
+init_telinit(metricbeat_t)
+storage_getattr_fixed_disk_dev(metricbeat_t)
+domain_search_all_domains_state(metricbeat_t)
+domain_read_all_domains_state(metricbeat_t)
+domain_read_confined_domains_state(metricbeat_t)
+

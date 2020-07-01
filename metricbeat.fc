@@ -1,0 +1,8 @@
+/etc/rc\.d/init\.d/metricbeat	--	gen_context(system_u:object_r:metricbeat_initrc_exec_t,s0)
+
+/lib/systemd/system/metricbeat.service		--	gen_context(system_u:object_r:metricbeat_unit_file_t,s0)
+
+/usr/share/metricbeat/bin/metricbeat		--	gen_context(system_u:object_r:metricbeat_exec_t,s0)
+
+/var/lib/metricbeat(/.*)?		--	gen_context(system_u:object_r:metricbeat_var_lib_t,s0)
+/var/log/metricbeat(/.*)?		--	gen_context(system_u:object_r:metricbeat_log_t,s0)
