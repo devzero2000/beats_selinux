@@ -132,9 +132,8 @@ exit 0
 %{_datadir}/selinux/devel/include/contrib/metricbeat.if
 
 %changelog
-* Wed Jan 17 2018 fuero <fuerob@gmail.com> - 1.0-1
-- Initial version
 * Wed Jul  1 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-2
 - Added metricbeat policy
 - Fixed filebeat policy on CentOS 8
-
+* Wed Jan 17 2018 fuero <fuerob@gmail.com> - 1.0-1
+- Initial version
