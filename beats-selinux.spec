@@ -1,23 +1,12 @@
-# vim: sw=4:ts=4:et
-%define relabel_files() \
-restorecon -RFi /%{_lib}/systemd/system;                \
-restorecon -RFi %{_datadir}/filebeat/bin;               \
-restorecon -RFi %{_datadir}/journalbeat/bin;            \
-restorecon -RFi %{_datadir}/auditbeat/bin;              \
-restorecon -RFi %{_datadir}/metricbeat/bin;              \
-restorecon -RFi %{_bindir};                             \
-restorecon -RFi %{_sharedstatedir}/auditbeat;           \
-restorecon -RFi %{_localstatedir}/log/auditbeat;        \
-restorecon -RFi %{_sharedstatedir}/filebeat;            \
-restorecon -RFi %{_localstatedir}/log/filebeat;         \
-restorecon -RFi %{_sharedstatedir}/journalbeat;         \
-restorecon -RFi %{_localstatedir}/log/journalbeat;      \
-restorecon -RFi %{_sharedstatedir}/metricbeat;         \
-restorecon -RFi %{_localstatedir}/log/metricbeat;
+# vim: sw=4:ts=4:/et
+
+%global with_selinux 1
+%global selinuxtype targeted
+
 
 Name:               beats-selinux
 Version:            1.0
-Release:            2%{?dist}
+Release:            3%{?dist}
 Summary:            SELinux policy module for various beats
 
 Group:              System Environment/Base     
@@ -42,12 +31,15 @@ BuildRequires:      selinux-policy-devel >= 3.13
 BuildConflicts:     selinux-policy-devel < 3.13
 BuildRequires:      policycoreutils-devel
 Requires:           policycoreutils
+Requires:           selinux-policy-%{selinuxtype}
 Requires:           libselinux-utils
 Requires:           selinux-policy >= 3.13
 Conflicts:          selinux-policy < 3.13
 Requires(post):     policycoreutils
+Requires(post):     selinux-policy-%{selinuxtype}
 Requires(postun):   policycoreutils
 BuildArch:          noarch
+%{?selinux_requires}
 
 %description
 This package installs and sets up the SELinux policy security module for beats.
@@ -68,6 +60,9 @@ make -f /usr/share/selinux/devel/Makefile auditbeat.pp || exit
 make -f /usr/share/selinux/devel/Makefile metricbeat.pp || exit
 
 %install
+
+%if 0%{?with_selinux}
+
 install -d %{buildroot}%{_datadir}/selinux/packages
 install -m 644 beats.pp %{buildroot}%{_datadir}/selinux/packages
 install -m 644 filebeat.pp %{buildroot}%{_datadir}/selinux/packages
@@ -81,43 +76,48 @@ install -m 644 auditbeat.if %{buildroot}%{_datadir}/selinux/devel/include/contri
 install -m 644 beats.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
 install -m 644 metricbeat.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
 install -d %{buildroot}/etc/selinux/targeted/contexts/users/
+%endif
+
+%if 0%{?with_selinux}
+
+%pre 
+%selinux_relabel_pre -s %{selinuxtype}
 
 %post
-semodule -n -i %{_datadir}/selinux/packages/beats.pp
-semodule -n -i %{_datadir}/selinux/packages/filebeat.pp
-semodule -n -i %{_datadir}/selinux/packages/journalbeat.pp
-semodule -n -i %{_datadir}/selinux/packages/auditbeat.pp
-semodule -n -i %{_datadir}/selinux/packages/metricbeat.pp
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/beats.pp
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/filebeat.pp
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/journalbeat.pp
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/auditbeat.pp
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/metricbeat.pp
 
 if /usr/sbin/selinuxenabled ; then
-    /usr/sbin/load_policy
-    %relabel_files
+    semanage port -p tcp -t logstash_port_t -a 5044
+    semanage port -p tcp -t kafka_port_t -a 9092
+    semanage port -p tcp -t elasticsearch_port_t -m 9200
 fi;
 
-semanage port -p tcp -t logstash_port_t -a 5044
-semanage port -p tcp -t kafka_port_t -a 9092
-semanage port -p tcp -t elasticsearch_port_t -m 9200
 exit 0
  
 %postun
 if [ $1 -eq 0 ]; then
-    semanage port -p tcp -t logstash_port_t -d 5044
-    semanage port -p tcp -t kafka_port_t -d 9092
-    semanage port -p tcp -t elasticsearch_port_t -d 9200
+	if /usr/sbin/selinuxenabled ; thenyy
+	    semanage port -p tcp -t logstash_port_t -d 5044
+	    semanage port -p tcp -t kafka_port_t -d 9092
+	    semanage port -p tcp -t elasticsearch_port_t -d 9200
 
-    semodule -n -r filebeat
-    semodule -n -r journalbeat
-    semodule -n -r auditbeat
-    semodule -n -r metricbeat
-    semodule -n -r beats
-
-    if /usr/sbin/selinuxenabled ; then
-       /usr/sbin/load_policy
-       %relabel_files
+	    %selinux_modules_uninstall -s %{selinuxtype} filebeat
+	    %selinux_modules_uninstall -s %{selinuxtype} journalbeat
+	    %selinux_modules_uninstall -s %{selinuxtype} auditbeat
+	    %selinux_modules_uninstall -s %{selinuxtype} metricbeat
+	    %selinux_modules_uninstall -s %{selinuxtype} beats
     fi;
 fi;
 exit 0
 
+%posttrans
+%selinux_relabel_post -s %{selinuxtype}
+# if with_selinux
+%endif
 %files
 %defattr(-,root,root,-)
 %{_datadir}/selinux/packages/beats.pp
@@ -132,6 +132,9 @@ exit 0
 %{_datadir}/selinux/devel/include/contrib/metricbeat.if
 
 %changelog
+* Tue Oct 20 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-3
+- major spec fixes based on https://fedoraproject.org/wiki/SELinux/IndipendentPolicy
+- use distro rpm macros for selinux custom policy install
 * Wed Jul  1 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-2
 - Added metricbeat policy
 - Fixed filebeat policy on CentOS 8
