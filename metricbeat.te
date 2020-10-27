@@ -38,6 +38,9 @@ systemd_unit_file(metricbeat_unit_file_t)
 type metricbeat_initrc_exec_t;
 init_script_file(metricbeat_initrc_exec_t)
 
+# XX: TODO: it is not necessary but on a centos 8 system I get a denial from the USER selinux part of systemd. To understand better.
+init_status(metricbeat_t)
+
 gen_tunable(metricbeat_can_read_all_logs, true)
 tunable_policy(`metricbeat_can_read_all_logs', `
     logging_read_all_logs(metricbeat_t)
