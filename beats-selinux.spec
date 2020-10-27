@@ -6,7 +6,7 @@
 
 Name:               beats-selinux
 Version:            1.0
-Release:            6%{?dist}
+Release:            7%{?dist}
 Summary:            SELinux policy module for various beats
 
 Group:              System Environment/Base     
@@ -40,6 +40,14 @@ Requires(post):     selinux-policy-%{selinuxtype}
 Requires(postun):   policycoreutils
 BuildArch:          noarch
 %{?selinux_requires}
+
+%if 0%{?with_selinux}
+# This ensures that the *-selinux package and all it’s dependencies are not pulled
+# into containers and other systems that do not use SELinux
+Requires:        (%{name} if selinux-policy-%{selinuxtype})
+%endif
+
+
 
 %description
 This package installs and sets up the SELinux policy security module for beats.
@@ -134,6 +142,13 @@ exit 0
 %{_datadir}/selinux/devel/include/contrib/metricbeat.if
 
 %changelog
+* Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-7
+- add new metricbeat.te : add init_status workaround
+- add new requires to the spec file, ensures that the *-selinux package 
+- and all it’s dependencies are not pulled
+- into containers and other systems that do not use SELinux
+- (based on https://fedoraproject.org/wiki/SELinux/IndependentPolicy)
+
 * Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-6
 - add new metricbeat.te 
 * Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-5
