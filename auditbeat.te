@@ -5,7 +5,7 @@ require {
   attribute beats_log_type;
   attribute beats_var_lib_type;
 
-  class capability { audit_control dac_override };
+  class capability { audit_control dac_override sys_ptrace};
   class file { create rename unlink write };
   class netlink_audit_socket { bind create getattr nlmsg_read nlmsg_readpriv nlmsg_write };
 }
@@ -15,6 +15,8 @@ typeattribute auditbeat_t beats_type;
 
 type auditbeat_exec_t;
 init_daemon_domain(auditbeat_t, auditbeat_exec_t)
+
+dontaudit auditbeat_t self:capability sys_ptrace;
 
 type auditbeat_log_t;
 typeattribute auditbeat_log_t beats_log_type;

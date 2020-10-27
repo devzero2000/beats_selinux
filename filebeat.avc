@@ -1,7 +1,0 @@
-----
-time->Wed Jul  1 12:15:30 2020
-type=AVC msg=audit(1593605730.804:6677): avc:  denied  { open } for  pid=20565 comm="filebeat" path="/proc/1/cgroup" dev="proc" ino=10951 scontext=system_u:system_r:filebeat_t:s0 tcontext=system_u:system_r:init_t:s0 tclass=file permissive=1
-type=AVC msg=audit(1593605730.804:6677): avc:  denied  { read } for  pid=20565 comm="filebeat" name="cgroup" dev="proc" ino=10951 scontext=system_u:system_r:filebeat_t:s0 tcontext=system_u:system_r:init_t:s0 tclass=file permissive=1
-----
-time->Wed Jul  1 12:15:30 2020
-type=AVC msg=audit(1593605730.805:6678): avc:  denied  { getattr } for  pid=20565 comm="filebeat" path="/proc/1/cgroup" dev="proc" ino=10951 scontext=system_u:system_r:filebeat_t:s0 tcontext=system_u:system_r:init_t:s0 tclass=file permissive=1

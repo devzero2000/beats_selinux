@@ -9,13 +9,14 @@ require {
 type filebeat_t;
 typeattribute filebeat_t beats_type;
 
-permissive filebeat_t;
+#permissive filebeat_t;
 type filebeat_exec_t;
 init_daemon_domain(filebeat_t, filebeat_exec_t)
 
 
 allow filebeat_t self:capability sys_admin;
 allow filebeat_t self:unix_dgram_socket { connect create getattr setopt };
+dontaudit filebeat_t self:capability sys_ptrace;
 
 type filebeat_log_t;
 typeattribute filebeat_log_t beats_log_type;

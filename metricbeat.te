@@ -9,7 +9,7 @@ require {
 type metricbeat_t;
 typeattribute metricbeat_t beats_type;
 
-permissive metricbeat_t;
+#permissive metricbeat_t;
 type metricbeat_exec_t;
 init_daemon_domain(metricbeat_t, metricbeat_exec_t)
 
@@ -17,6 +17,8 @@ init_daemon_domain(metricbeat_t, metricbeat_exec_t)
 allow metricbeat_t self:capability sys_admin;
 allow metricbeat_t self:unix_dgram_socket { connect create getattr setopt };
 allow metricbeat_t self:capability dac_read_search;
+dontaudit metricbeat_t self:capability sys_ptrace;
+
 
 type metricbeat_log_t;
 typeattribute metricbeat_log_t beats_log_type;
