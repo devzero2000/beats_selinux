@@ -6,7 +6,7 @@
 
 Name:               beats-selinux
 Version:            1.0
-Release:            5%{?dist}
+Release:            6%{?dist}
 Summary:            SELinux policy module for various beats
 
 Group:              System Environment/Base     
@@ -134,6 +134,8 @@ exit 0
 %{_datadir}/selinux/devel/include/contrib/metricbeat.if
 
 %changelog
+* Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-6
+- add new metricbeat.te 
 * Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-5
 - add dontaudit sys_ptrace everywhere
 - drop permissive
