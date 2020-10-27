@@ -6,7 +6,7 @@
 
 Name:               beats-selinux
 Version:            1.0
-Release:            3%{?dist}
+Release:            4%{?dist}
 Summary:            SELinux policy module for various beats
 
 Group:              System Environment/Base     
@@ -91,9 +91,10 @@ install -d %{buildroot}/etc/selinux/targeted/contexts/users/
 %selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/metricbeat.pp
 
 if /usr/sbin/selinuxenabled ; then
-# use -m for logstash and kafka so don't fail on upgrade
-    semanage port -p tcp -t logstash_port_t -m 5044
-    semanage port -p tcp -t kafka_port_t -m 9092
+	if [ $1 -eq 1 ]; then
+	    semanage port -p tcp -t logstash_port_t -a 5044
+	    semanage port -p tcp -t kafka_port_t -a 9092
+	fi;
     semanage port -p tcp -t elasticsearch_port_t -m 9200
 fi;
 
@@ -101,7 +102,7 @@ exit 0
  
 %postun
 if [ $1 -eq 0 ]; then
-	if /usr/sbin/selinuxenabled ; thenyy
+	if /usr/sbin/selinuxenabled ; then
 	    semanage port -p tcp -t logstash_port_t -d 5044
 	    semanage port -p tcp -t kafka_port_t -d 9092
 	    semanage port -p tcp -t elasticsearch_port_t -d 9200
@@ -133,7 +134,10 @@ exit 0
 %{_datadir}/selinux/devel/include/contrib/metricbeat.if
 
 %changelog
+* Tue Oct 21 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-4
+- fix on port add
 * Tue Oct 20 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-3
+- minor spec fixes based on https://fedoraproject.org/wiki/SELinux/IndipendentPolicy
 - minor spec fixes based on https://fedoraproject.org/wiki/SELinux/IndipendentPolicy
 * Wed Jul  1 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-2
 - Added metricbeat policy
