@@ -1,0 +1,150 @@
+Elia Pinto <pinto.elia@gmail.com>	2020-10-29
+
+    add the right perms to ghost directive
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-29
+
+    bump to 1.0-8
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-29
+
+    add git2changelog.sh
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    add 1.0.7 rpm
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    - add new metricbeat.te : add init_status workaround
+    - add new requires to the spec file, ensures that the *-selinux package
+    - and all it’s dependencies are not pulled
+    - into containers and other systems that do not use SELinux
+    - (based on https://fedoraproject.org/wiki/SELinux/IndependentPolicy)
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    metricbeat.te: add init_status
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    add 1.0.6 rpm
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    add rpm for 1.0-5
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    version 1.0.6
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    metribeat.te:
+    
+    add:
+    fs_getattr_iso9660_fs(metricbeat_t)
+    storage_getattr_removable_dev(metricbeat_t)
+    dev_getattr_fs(metricbeat_t)
+    dev_getattr_generic_blk_files(metricbeat_t)
+    fs_getattr_dos_fs(metricbeat_t)
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    add 1.0.5 (S)RPMS
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    bump new version 1.0.5
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    dontaudit sys_ptrace. drop permissive domain
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    add new rpm for 1.0-4
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-27
+
+    beats-selinux.spec: fix on port add
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-20
+
+    added new rpms release
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-20
+
+    fix semanage port in install and upgrade
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-20
+
+    major spec fixes based on https://fedoraproject.org/wiki/SELinux/IndipendentPolicy
+    use distro rpm macros for selinux custom policy install
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-09-23
+
+    Update rpm(s)
+
+Elia Pinto <pinto.elia@gmail.com>	2020-09-23
+
+    Fix author ordering in spec file
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-07-01
+
+    adding rpm
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-07-01
+
+    added selinux policy
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-07-01
+
+    Update README
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-07-01
+
+    Initial commit
