@@ -119,11 +119,11 @@ exit 0
 %defattr(-,root,root,-)
 %{_datadir}/selinux/packages/%{selinuxtype}/*.pp.bz2
 %{_datadir}/selinux/devel/include/contrib/*.if
-%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/beats
-%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/filebeat
-%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/metricbeat
-%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/journalbeat
-%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/auditbeat
+%ghost %attr(700, root, root) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/beats
+%ghost %attr(700, root, root) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/filebeat
+%ghost %attr(700, root, root) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/metricbeat
+%ghost %attr(700, root, root) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/journalbeat
+%ghost %attr(700, root, root) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/auditbeat
 
 %changelog
 * Thu Oct 29 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-8
