@@ -6,11 +6,11 @@
 
 Name:               beats-selinux
 Version:            1.0
-Release:            7%{?dist}
+Release:            8%{?dist}
 Summary:            SELinux policy module for various beats
 
-Group:              System Environment/Base     
-License:            GPLv2+  
+Group:              System Environment/Base
+License:            GPLv2+
 URL:                https://git.im.jku.at/summary/packages!beats-selinux.git
 Source0:            beats.te
 Source1:            beats.if
@@ -29,17 +29,11 @@ Source13:           metricbeat.if
 
 BuildRequires:      selinux-policy-devel >= 3.13
 BuildConflicts:     selinux-policy-devel < 3.13
-BuildRequires:      policycoreutils-devel
-Requires:           policycoreutils
-Requires:           selinux-policy-%{selinuxtype}
-Requires:           libselinux-utils
-Requires:           selinux-policy >= 3.13
+%{?selinux_requires}
 Conflicts:          selinux-policy < 3.13
-Requires(post):     policycoreutils
 Requires(post):     selinux-policy-%{selinuxtype}
 Requires(postun):   policycoreutils
 BuildArch:          noarch
-%{?selinux_requires}
 
 %if 0%{?with_selinux}
 # This ensures that the *-selinux package and all it’s dependencies are not pulled
@@ -66,24 +60,17 @@ make -f /usr/share/selinux/devel/Makefile filebeat.pp || exit
 make -f /usr/share/selinux/devel/Makefile journalbeat.pp || exit
 make -f /usr/share/selinux/devel/Makefile auditbeat.pp || exit
 make -f /usr/share/selinux/devel/Makefile metricbeat.pp || exit
+bzip2 -9 *.pp
 
 %install
 
 %if 0%{?with_selinux}
-
-install -d %{buildroot}%{_datadir}/selinux/packages
-install -m 644 beats.pp %{buildroot}%{_datadir}/selinux/packages
-install -m 644 filebeat.pp %{buildroot}%{_datadir}/selinux/packages
-install -m 644 journalbeat.pp %{buildroot}%{_datadir}/selinux/packages
-install -m 644 auditbeat.pp %{buildroot}%{_datadir}/selinux/packages
-install -m 644 metricbeat.pp %{buildroot}%{_datadir}/selinux/packages
+# SELinux
+# install policy modules
+install -d %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype}
+install -m 0644 *.pp.bz2 %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype}
 install -d %{buildroot}%{_datadir}/selinux/devel/include/contrib
-install -m 644 filebeat.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
-install -m 644 journalbeat.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
-install -m 644 auditbeat.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
-install -m 644 beats.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
-install -m 644 metricbeat.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
-install -d %{buildroot}/etc/selinux/targeted/contexts/users/
+install -m 644 *.if %{buildroot}%{_datadir}/selinux/devel/include/contrib/
 %endif
 
 %if 0%{?with_selinux}
@@ -92,11 +79,11 @@ install -d %{buildroot}/etc/selinux/targeted/contexts/users/
 %selinux_relabel_pre -s %{selinuxtype}
 
 %post
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/beats.pp
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/filebeat.pp
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/journalbeat.pp
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/auditbeat.pp
-%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/metricbeat.pp
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/beats.pp.bz2
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/filebeat.pp.bz2
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/journalbeat.pp.bz2
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/auditbeat.pp.bz2
+%selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/metricbeat.pp.bz2
 
 if /usr/sbin/selinuxenabled ; then
 	if [ $1 -eq 1 ]; then
@@ -130,31 +117,31 @@ exit 0
 %endif
 %files
 %defattr(-,root,root,-)
-%{_datadir}/selinux/packages/beats.pp
-%{_datadir}/selinux/packages/filebeat.pp
-%{_datadir}/selinux/packages/journalbeat.pp
-%{_datadir}/selinux/packages/auditbeat.pp
-%{_datadir}/selinux/packages/metricbeat.pp
-%{_datadir}/selinux/devel/include/contrib/beats.if
-%{_datadir}/selinux/devel/include/contrib/filebeat.if
-%{_datadir}/selinux/devel/include/contrib/journalbeat.if
-%{_datadir}/selinux/devel/include/contrib/auditbeat.if
-%{_datadir}/selinux/devel/include/contrib/metricbeat.if
+%{_datadir}/selinux/packages/%{selinuxtype}/*.pp.bz2
+%{_datadir}/selinux/devel/include/contrib/*.if
+%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/beats
+%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/filebeat
+%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/metricbeat
+%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/journalbeat
+%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/auditbeat
 
 %changelog
+* Thu Oct 29 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-8
+- compress module files
+- add ghost directive
+- move modules to /usr/share/selinux/packages/targeted
 * Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-7
 - add new metricbeat.te : add init_status workaround
 - add new requires to the spec file, ensures that the *-selinux package 
 - and all it’s dependencies are not pulled
 - into containers and other systems that do not use SELinux
 - (based on https://fedoraproject.org/wiki/SELinux/IndependentPolicy)
-
 * Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-6
 - add new metricbeat.te 
 * Tue Oct 27 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-5
 - add dontaudit sys_ptrace everywhere
 - drop permissive
-* Tue Oct 21 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-4
+* Wed Oct 21 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-4
 - fix on port add
 * Tue Oct 20 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-3
 - minor spec fixes based on https://fedoraproject.org/wiki/SELinux/IndipendentPolicy
