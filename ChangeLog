@@ -1,3 +1,26 @@
+Elia Pinto <pinto.elia@gmail.com>	2021-06-18
+
+    beats-selinux.spec: bump to 1.0-9
+    
+    bump to 1.0-9 with cgroup permission to
+    filebeat.te
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2021-06-18
+
+    filebeat.te: add cgroup policy
+    
+    Add fs_read(search) cgroup permission.
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2020-10-29
+
+    add Changelog
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
 Elia Pinto <pinto.elia@gmail.com>	2020-10-29
 
     add 1.0.8 rpm
