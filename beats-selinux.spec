@@ -6,7 +6,7 @@
 
 Name:               beats-selinux
 Version:            1.0
-Release:            8%{?dist}
+Release:            9%{?dist}
 Summary:            SELinux policy module for various beats
 
 Group:              System Environment/Base
@@ -126,6 +126,8 @@ exit 0
 %ghost %attr(700, root, root) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/auditbeat
 
 %changelog
+* Fri Jun 18 2021 Elia Pinto <pinto.elia@gmail.com> - 1.0-9
+- add cgroup permission to filebeat.te
 * Thu Oct 29 2020 Elia Pinto <pinto.elia@gmail.com> - 1.0-8
 - compress module files
 - add ghost directive
