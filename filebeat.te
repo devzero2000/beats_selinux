@@ -1,4 +1,4 @@
-policy_module(filebeat, 1.0.0)
+policy_module(filebeat, 1.0.2)
 
 require {
   attribute beats_type;
@@ -53,3 +53,5 @@ kernel_read_all_proc(filebeat_t)
 domain_search_all_domains_state(filebeat_t)
 domain_read_all_domains_state(filebeat_t)
 domain_read_confined_domains_state(filebeat_t)
+fs_search_cgroup_dirs(filebeat_t)
+fs_read_cgroup_files(filebeat_t)
