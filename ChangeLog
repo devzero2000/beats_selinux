@@ -1,3 +1,33 @@
+Elia Pinto <pinto.elia@gmail.com>	2022-03-08
+
+    fixup URL
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2022-03-08
+
+    added selinux man pages
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <gitter.spiros@gmail.com>	2022-03-08
+
+    added .gitignore
+    
+    Signed-off-by: Elia Pinto <gitter.spiros@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2021-06-18
+
+    add (S)RPMS for 1.0-9 version
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
+Elia Pinto <pinto.elia@gmail.com>	2021-06-18
+
+    Changelog: add 1.0-9 commit
+    
+    Signed-off-by: Elia Pinto <pinto.elia@gmail.com>
+
 Elia Pinto <pinto.elia@gmail.com>	2021-06-18
 
     beats-selinux.spec: bump to 1.0-9
