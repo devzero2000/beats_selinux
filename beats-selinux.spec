@@ -11,7 +11,7 @@ Summary:            SELinux policy module for various beats
 
 Group:              System Environment/Base
 License:            GPLv2+
-URL:                https://git.im.jku.at/summary/packages!beats-selinux.git
+URL:                https://github.com/devzero2000/beats_selinux.git
 Source0:            beats.te
 Source1:            beats.if
 Source2:            filebeat.te
